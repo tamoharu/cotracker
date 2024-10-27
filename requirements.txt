@@ -1,0 +1,10 @@
+flow_vis==0.1
+imageio==2.26.0
+imageio_ffmpeg==0.5.1
+matplotlib==3.7.0
+numpy==2.1.2
+onnxruntime==1.16.3
+opencv_python==4.8.1.78
+Pillow==11.0.0
+torch==2.1.2
+torchvision==0.16.2
