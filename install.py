@@ -6,14 +6,6 @@ import zipfile
 
 
 venv_dir = "venv"
-datasets = {
-    "SMRCs": [
-        'https://github.com/tamoharu/dataset/releases/download/dataset/SMRCs.zip'
-    ],
-    "PerLTQA": [
-        'https://github.com/tamoharu/dataset/releases/download/dataset/PerLTQA.zip'
-    ]
-}
 
 
 def create_virtual_environment():
@@ -50,16 +42,9 @@ def download_and_extract(url, extract_to):
 
 
 def download_datasets():
-    for dataset, urls in datasets.items():
-        if dataset == "SMRCs":
-            extract_to = "./SMRCs/dataset/prepared"
-        elif dataset == "PerLTQA":
-            extract_to = "./PerLTQA/dataset/prepared"
-        else:
-            continue
-
-        for url in urls:
-            download_and_extract(url, extract_to)
+    extract_to = './checkpoints/'
+    url = 'https://github.com/tamoharu/cotracker/releases/download/model/ckpt.zip'
+    download_and_extract(url, extract_to)
 
 
 def main():
