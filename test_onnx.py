@@ -5,12 +5,16 @@ import time
 
 from cotracker.core.cotracker3 import CoTrackerThreeOnline
 
-ort_session_encoder = ort.InferenceSession("fnet.onnx")
-ort_session_mlp = ort.InferenceSession("corr_mlp.onnx")
-ort_session_transformer = ort.InferenceSession("updateformer.onnx")
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+ort_session_encoder = ort.InferenceSession("./onnx_models/fnet.onnx")
+ort_session_mlp = ort.InferenceSession("./onnx_models/corr_mlp.onnx")
+ort_session_transformer = ort.InferenceSession("./onnx_models/updateformer.onnx")
 
 def to_numpy(tensor):
-    return tensor.detach().cpu().numpy() if tensor.requires_grad else tensor.cpu().numpy()
+    tensor = tensor.detach().numpy() if tensor.requires_grad else tensor.numpy()
+    tensor = tensor.cpu() if tensor.device == 'cuda' else tensor
+    return tensor
 
 dummy_input_fnet = torch.randn(16, 3, 384, 512)
 dummy_input_updateformer = torch.randn(1, 100, 16, 1110)
