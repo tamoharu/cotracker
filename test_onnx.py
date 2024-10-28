@@ -12,9 +12,9 @@ ort_session_mlp = ort.InferenceSession("./onnx_models/corr_mlp.onnx")
 ort_session_transformer = ort.InferenceSession("./onnx_models/updateformer.onnx")
 
 def to_numpy(tensor):
-    tensor = tensor.detach().numpy() if tensor.requires_grad else tensor.numpy()
+    tensor = tensor.detach() if tensor.requires_grad else tensor
     tensor = tensor.cpu() if tensor.device == 'cuda' else tensor
-    return tensor
+    return tensor.numpy()
 
 dummy_input_fnet = torch.randn(16, 3, 384, 512)
 dummy_input_updateformer = torch.randn(1, 100, 16, 1110)
