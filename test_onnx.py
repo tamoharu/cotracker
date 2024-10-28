@@ -15,7 +15,7 @@ ort_session_transformer = ort.InferenceSession("./onnx_models/updateformer.onnx"
 
 def to_numpy(tensor):
     tensor = tensor.detach() if tensor.requires_grad else tensor
-    tensor = tensor.cpu() if DEFAULT_DEVICE != 'cuda' else tensor.cuda()
+    tensor = tensor.cpu() if DEFAULT_DEVICE != 'cuda' else tensor
     return tensor.numpy()
 
 dummy_input_fnet = torch.randn(16, 3, 384, 512)
