@@ -5,7 +5,9 @@ import time
 
 from cotracker.core.cotracker3 import CoTrackerThreeOnline
 
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEFAULT_DEVICE = (
+    "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+)
 
 ort_session_encoder = ort.InferenceSession("./onnx_models/fnet.onnx")
 ort_session_mlp = ort.InferenceSession("./onnx_models/corr_mlp.onnx")
@@ -13,7 +15,7 @@ ort_session_transformer = ort.InferenceSession("./onnx_models/updateformer.onnx"
 
 def to_numpy(tensor):
     tensor = tensor.detach() if tensor.requires_grad else tensor
-    tensor = tensor.cpu() if tensor.device == 'cuda' else tensor
+    tensor = tensor.cpu() if DEFAULT_DEVICE != 'cuda' else tensor.cuda()
     return tensor.numpy()
 
 dummy_input_fnet = torch.randn(16, 3, 384, 512)
@@ -46,7 +48,7 @@ print(f'outputs_transformer: {outputs_transformer.shape}')
 print(f'outputs_mlp: {outputs_mlp.shape}')
 
 pt_model = CoTrackerThreeOnline(window_len=16)
-pt_model.load_state_dict(torch.load('./checkpoints/baseline_online.pth', map_location=torch.device('cpu')))
+pt_model.load_state_dict(torch.load('./checkpoints/baseline_online.pth', map_location=torch.device(DEFAULT_DEVICE)))
 
 start_time = time.time()
 pt_outputs_encoder = pt_model.fnet(dummy_input_fnet)

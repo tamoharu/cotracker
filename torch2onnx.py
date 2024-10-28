@@ -2,10 +2,14 @@ import torch
 import torch.onnx
 from cotracker.core.cotracker3 import CoTrackerThreeOnline
 
+DEFAULT_DEVICE = (
+    "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+)
+
 window_len = 16
 model_resolution = (384, 512)
 model = CoTrackerThreeOnline(window_len=window_len, model_resolution=model_resolution)
-model.load_state_dict(torch.load('./checkpoints/baseline_online.pth', map_location=torch.device('cpu')))
+model.load_state_dict(torch.load('./checkpoints/baseline_online.pth', map_location=torch.device(DEFAULT_DEVICE)))
 
 fnet = model.fnet
 updateformer = model.updateformer
